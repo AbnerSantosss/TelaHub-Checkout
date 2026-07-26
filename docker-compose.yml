@@ -10,6 +10,9 @@
 
 services:
   checkout:
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: ghcr.io/abnersantosss/telahub-checkout:${IMAGE_TAG:-latest}
     container_name: telahub-checkout
     restart: unless-stopped
