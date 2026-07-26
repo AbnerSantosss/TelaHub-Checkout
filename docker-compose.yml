@@ -1,7 +1,7 @@
 # Stack de PRODUÇÃO do checkout (contratação + painel do funil).
 #
-# Sem porta publicada e sem `build:` — quem expõe é o Cloudflare Tunnel, e a
-# imagem vem pronta do GHCR.
+# A porta publicada é exigida pelo túnel, que roda no HOST e aponta para
+# `localhost:42939`. A imagem vem pronta do GHCR.
 #
 # O Nginx desta imagem faz `proxy_pass http://backend:3001` em `/api/`, então
 # este container PRECISA estar na mesma rede do backend do painel: é daí que ele
@@ -13,6 +13,9 @@ services:
     image: ghcr.io/abnersantosss/telahub-checkout:${IMAGE_TAG:-latest}
     container_name: telahub-checkout
     restart: unless-stopped
+    ports:
+      # checkout.proxserverabner.site -> localhost:42939 (rota a criar no túnel)
+      - "42939:80"
     networks:
       - telahub_net
     healthcheck:
