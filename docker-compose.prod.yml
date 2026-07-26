@@ -1,7 +1,7 @@
 # Stack NOVA do checkout.
 #
-# Sem porta publicada: quem expõe é o `cloudflared` da stack `telahub-tunnel`,
-# que alcança este container pelo nome `checkout`.
+# Porta própria (4039): o túnel desta VPS roda no HOST e roteia para
+# `localhost:PORTA`, então publicar é obrigatório.
 #
 # O Nginx desta imagem faz `proxy_pass http://backend:3001` em `/api/`, então
 # este container PRECISA estar na mesma rede do backend do painel — é de lá que
@@ -18,6 +18,9 @@ services:
       dockerfile: Dockerfile
     container_name: telahub-checkout-prod
     restart: unless-stopped
+    ports:
+      # checkout.proxserverabner.site -> localhost:4039
+      - "4039:80"
     networks:
       - telahub_net
     healthcheck:
